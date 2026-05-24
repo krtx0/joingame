@@ -65,8 +65,6 @@
             
             // Auto-redirect immediately
             window.location.href = appUrl;
-            
-            // Fallback: if they clicked but redirect didn't happen (e.g. Chrome block), they can tap the button
         } else {
             document.querySelector('p').innerText = "Invalid room code link. Please check the link and try again.";
             document.getElementById('open-btn').style.display = 'none';
