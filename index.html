@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Game Hub - Join Room</title>
+    <title>VYBE - Join Room</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --bg-gradient: linear-gradient(135deg, #0a0e17 0%, #111827 100%);
             --card-bg: rgba(255, 255, 255, 0.03);
             --card-border: rgba(255, 255, 255, 0.08);
             --primary: #818cf8;
             --primary-glow: rgba(129, 140, 248, 0.5);
-            --accent: #22d3ee;
+            --accent: #00d2ff;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -88,8 +88,8 @@
 
         .logo {
             font-weight: 800;
-            font-size: 24px;
-            letter-spacing: 2px;
+            font-size: 28px;
+            letter-spacing: 3px;
             background: linear-gradient(to right, var(--primary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -132,7 +132,7 @@
             font-weight: 800;
             letter-spacing: 4px;
             color: var(--accent);
-            text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
         }
 
         .btn {
@@ -181,7 +181,7 @@
 </head>
 <body>
     <div class="card">
-        <div class="logo">The Game Hub</div>
+        <div class="logo">VYBE</div>
         <div class="title">Join Game Room</div>
         
         <div class="code-container" id="code-box" style="display: none;">
@@ -208,11 +208,11 @@
             document.getElementById('room-code-display').innerText = roomId;
 
             // Generate App Launch URLs
-            // Chrome Intent URL for Android
-            const intentUrl = "intent://tictactoe?roomId=" + roomId + "#Intent;scheme=thegamehub;package=com.krtx.thegamehub;S.browser_fallback_url=" + encodeURIComponent(window.location.origin + window.location.pathname + "?roomId=" + roomId + "&fallback=true") + ";end;";
+            // Chrome Intent URL for Android (package com.krtx.vybe, scheme vybe)
+            const intentUrl = "intent://tictactoe?roomId=" + roomId + "#Intent;scheme=vybe;package=com.krtx.vybe;S.browser_fallback_url=" + encodeURIComponent(window.location.origin + window.location.pathname + "?roomId=" + roomId + "&fallback=true") + ";end;";
             
             // Standard Custom Scheme for iOS/Other
-            const customSchemeUrl = "thegamehub://tictactoe?roomId=" + roomId;
+            const customSchemeUrl = "vybe://tictactoe?roomId=" + roomId;
             
             const isAndroid = /Android/i.test(navigator.userAgent);
             const appUrl = isAndroid ? intentUrl : customSchemeUrl;
