@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Hangman - VYBE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0b0f19, #1a1e2d);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .container {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            padding: 40px 30px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 24px;
+        }
+        .game-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .room-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .room-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+        .room-code {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #a855f7;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .room-code:active {
+            transform: scale(0.95);
+        }
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 54px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+            border: none;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #a855f7, #ec4899);
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(168, 85, 247, 0.4);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(255, 255, 255, 0.95);
+            color: #0f0c1b;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo">VYBE</div>
+        <div class="game-title">Hangman Match</div>
+        <p id="status" class="subtitle">Attempting to open game in VYBE app...</p>
+
+        <div class="room-card">
+            <div class="room-label">Match Room Code</div>
+            <div id="roomCodeDisplay" class="room-code" onclick="copyRoomCode()">----</div>
+        </div>
+
+        <button class="btn btn-primary" onclick="launchApp()">Open in VYBE App</button>
+        <button class="btn btn-secondary" onclick="copyRoomCode()">Copy Code & Open App</button>
+    </div>
+
+    <div id="toast" class="toast">Code copied to clipboard!</div>
+
+    <script>
+        // Parse roomId from URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomId = urlParams.get('roomId') || '';
+        
+        document.getElementById('roomCodeDisplay').innerText = roomId || '----';
+
+        // Deep Link Custom Scheme
+        const customScheme = `vybe://hangman?roomId=${roomId}`;
+
+        function launchApp() {
+            if (!roomId) {
+                document.getElementById('status').innerText = "Invalid link. Missing room ID.";
+                return;
+            }
+            window.location.href = customScheme;
+        }
+
+        function copyRoomCode() {
+            if (!roomId) return;
+            navigator.clipboard.writeText(roomId).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        // Auto-redirect on page load
+        window.onload = function() {
+            if (roomId) {
+                launchApp();
+                setTimeout(() => {
+                    document.getElementById('status').innerText = "If the app didn't open automatically, ensure it is installed and click the button below.";
+                }, 2500);
+            } else {
+                document.getElementById('status').innerText = "Lobby code not detected in the URL.";
+            }
+        };
+    </script>
+</body>
+</html>
